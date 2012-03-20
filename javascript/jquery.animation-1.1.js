@@ -1,5 +1,5 @@
 /*
- * jQuery Animate v1.0 - http://www.hugomastromauro.com
+ * jQuery Animate v1.1 - http://www.hugomastromauro.com
  * 
  * Copyright © 2011 Hugo Mastromauro
  * All rights reserved.
@@ -39,7 +39,6 @@
 				if (!args.options)
 					args['options'] = {};
 				
-				
 				// Verifica se o elemento vai fazer duas ações
 				if (typeof args.orientation == 'object') {
 					
@@ -63,8 +62,9 @@
 							
 						});
 						
-					} else {			
-						// Se não for sequêncial, executa de de forma simples
+					} else {
+
+						// Se não for sequêncial, executa de forma simples
 						$.each(args.orientation, function(index, value) { 						
 
 							// Verifica se tem função de retorno								
@@ -75,7 +75,9 @@
 								
 							// Chama a função que define as animações
 							if (typeof value.orientation == 'string' && value.orientation == 'event') {
+								
 								$.eventHandler(value, el, defaults);
+								
 							}else{
 								$.orientation(value, el, defaults, args.options);
 							}
@@ -121,9 +123,9 @@
 			$.each(eventobj.orientation, function(index, value) { 
 
 				// Verifica se tem função de retorno								
-				if (index == args.orientation.length-1) {
-					if (args.options.callback)
-						value.callback = args.options.callback;
+				if (index == eventobj.orientation.length-1) {
+					if (eventobj.options.callback)
+						value.callback = eventobj.options.callback;
 				}
 
 				// Chama a função que define as animações				
@@ -229,7 +231,7 @@
 		defaults.els[defaults.order] = anim;
 		defaults.order++;
 		
-		console.debug(anim);
+		//console.debug(anim);
 	};
 	
 	$.sequential = function(el, options) {
@@ -541,7 +543,7 @@
     		callbackeffect: function() {
 				
 				// Executa função de retorno se definida
-    			if (typeof defaults.els[count].callback == 'function')
+    			if (typeof window[defaults.els[count].callback] == 'function')
     				window[defaults.els[count].callback]();
     			 
     			// Verifica estado das animações e continua execução    			

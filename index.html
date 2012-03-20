@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+	<meta charset="utf-8" />
+
+	  
+	<title>JQuery Animation HTML5</title>
+	
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="javascript/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="javascript/jquery.animation-1.1.js"></script>	
+
+	<script type="text/javascript">
+		
+		$(document).ready(function() {
+
+			$(".animate").animation({
+				
+				events: {
+					
+					"tit2": {
+						
+						"orientation": [
+							{				
+								"start": { "left": -540 },
+								"end": { "left": 0 },
+								"duration": 400,
+								"easing": "easeInOutBack"
+							}
+						],
+						
+						"options": {
+							"event": "click",
+							"target": ".tit-2"
+						}
+					},
+					
+					"tit3": {
+						
+						"orientation": [
+							{				
+								"start": { "left": -540 },
+								"end": { "left": 0 },
+								"duration": 300,
+								"easing": "easeInCirc"
+							}
+						],
+						
+						"options": {
+							"event": "click",
+							"target": ".tit-3"
+						}
+					},
+					
+					"tit4": {
+						
+						"orientation": [
+							{				
+								"start": { "left": -540 },
+								"end": { "left": 0 },
+								"duration": 100
+							}
+						],
+						
+						"options": {
+							"event": "click",
+							"target": ".tit-4"
+						}
+					}
+				}
+			});
+		});
+		
+	</script>
+	
+</head>
+<body>
+	
+	<div class="animate tit-1" data-effects='{ "orientation": [ {"start": { "left": -600 }, "end": { "left": 0 }, "duration": 400, "easing": "" } ], "options": { "order": 1 } }'><img src="images/tit_1.png" /></div>
+	
+	<img src="images/logo.png" class="animate logo" data-effects='{ "orientation": [ {"start": { "top": -100 }, "end": { "top": 50 }, "duration": 400, "easing": "easeOutBounce" } ], "options": { "order": 2 } }' />
+	
+	<div class="animate tit-2" data-effects='{ "orientation": [ {"start": { "left": -600 }, "end": { "left": -540 }, "duration": 400, "easing": "easeInCubic" }, { "orientation": "event", "name": "tit2" } ], "options": { "order": 3 } }'><img src="images/tit_2.png" /></div>
+	
+	<div class="animate tit-3" data-effects='{ "orientation": [ {"start": { "left": -600 }, "end": { "left": -540 }, "duration": 400, "easing": "easeInCubic" }, { "orientation": "event", "name": "tit3" } ], "options": { "order": 4 } }'><img src="images/tit_3.png" /></div>
+	
+	<div class="animate tit-4" data-effects='{ "orientation": [ {"start": { "left": -600 }, "end": { "left": -540 }, "duration": 400, "easing": "easeInCubic" }, { "orientation": "event", "name": "tit4" } ], "options": { "order": 5 } }'><img src="images/tit_4.png" /></div>
+	
+</body>
+</html>
