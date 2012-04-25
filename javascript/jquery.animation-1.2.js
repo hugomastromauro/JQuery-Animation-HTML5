@@ -144,7 +144,7 @@
 	};
 		
 	$.orientation = function(args, el, defaults, options){
-
+		
 		// Define se vai começar com alpha ou não
 		var rise = options.rise >= 0 ? options.rise : defaults.rise;
 
@@ -389,8 +389,18 @@
     				
     			} else {
 					
+					if (defaults.els[el].start.opacity == 1) {
+    					
+    					if (defaults.els[el].start.scale)
+    						$(defaults.els[el].obj)
+    							.scale(defaults.els[el].start.scale);
+    							
+						$(defaults.els[el].obj)
+							.css(defaults.els[el].start);
+					}
+    					
 					// Definindo pausa para o começo da animação do elemento
-    				window.setTimeout(function() {
+    				window.setTimeout(function() {	
     					effect[defaults.els[el].defined](el);
     				}, defaults.els[el].timeout);
     			}    		
@@ -398,13 +408,6 @@
     		
     		// Animação pré-definida básica
     		basic: function(el) {
-    			
-    			/// Definindo as propriedades de posicionamento padrão css se não for informado.
-    			/*$.each(defaults.els[el].end, function(key, value){
-    				if (value === "") {
-    					defaults.els[el].end[key] = $(defaults.els[el].obj).css(key);
-    				}
-    			});*/
     			
     			this.calculate(el);
 				
@@ -453,7 +456,12 @@
     		// Animação pré-definida de rotacionar
     		rotate: function(el) {
 				
-					rotate = defaults.els[el].start.rotate;
+				rotate = defaults.els[el].start.rotate;
+
+				if (rotate == undefined) {
+					rotate = $(defaults.els[el].obj).rotate();
+					defaults.els[el].start.rotate = rotate;
+				}
 										
     			$(defaults.els[el].obj)
     				.rotate(rotate)
@@ -490,13 +498,66 @@
     		// Animação pré-definida de escala
     		scale: function(el) {
 
-    			scale = defaults.els[el].start.scale;
+				scaleIn = defaults.els[el].start.scale;
+				
+				if (scaleIn == undefined) {
+					scaleIn = $(defaults.els[el].obj).scale();
+					defaults.els[el].start.scale = scaleIn;
+				}			
 				
 				$(defaults.els[el].obj)
-					.scale(scale)
+					.stop()
+					.scale(scaleIn)
 					.css(defaults.els[el].start)
-					.animate(defaults.els[el].end, defaults.els[el].duration, defaults.els[el].easing, effect.callbackeffect);
+					.animate(defaults.els[el].end, {queue: false, duration: defaults.els[el].duration, easing: defaults.els[el].easing, complete: effect.callbackeffect });
+										
+    		},
+    		
+    		pulse: function(el) {
+    			
+    			if ($(defaults.els[el].start).countObject() <= 2) {
+
+					scaleInit = defaults.els[el].start.scale;
+					scaleEnd = defaults.els[el].end.scale;
 					
+					if (scaleInit == undefined) {
+						scaleInit = $(defaults.els[el].obj).scale();
+						defaults.els[el].start.scale = scaleInit;
+					}
+					
+					if (scaleEnd == undefined) {
+						scaleEnd = 0.01;
+						defaults.els[el].end.scale = '+=0.01';
+					}else{
+						scaleEnd = defaults.els[el].end.scale;
+						defaults.els[el].end.scale = '+=' + scaleEnd;
+					}
+					
+					scalePulse = scaleEnd / 2;				
+					
+					$(defaults.els[el].obj)
+						.stop()
+						.scale(scaleInit)
+						.animate(defaults.els[el].end, {queue: false, duration: defaults.els[el].duration, easing: defaults.els[el].easing, complete: function() {
+
+							$(this).animate({ scale: '-=' + scalePulse.toString() }, {queue: false, duration: defaults.els[el].duration, easing: defaults.els[el].easing, complete: function() {
+								
+								$(this).animate({ scale: '+=' + scalePulse.toString() }, {queue: false, duration: defaults.els[el].duration, easing: defaults.els[el].easing, complete: function() {
+									
+									$(this).animate({ scale: '-=' + scaleEnd.toString() }, {queue: false, duration: defaults.els[el].duration, easing: defaults.els[el].easing, complete: effect.callbackeffect});
+								
+								}});
+							
+							}});
+							
+						}
+					});	
+										
+				} else {
+				
+					this.basic(el);
+				}
+						
     		},
     		
     		calculate: function(el) {
@@ -541,7 +602,7 @@
     		
     		// Retorno das animações
     		callbackeffect: function() {
-				
+
 				// Executa função de retorno se definida
     			if (typeof window[defaults.els[count].callback] == 'function')
     				window[defaults.els[count].callback]();
@@ -554,6 +615,11 @@
     		}
     	};
 	};
+	
+	$.fn.countObject = function() 
+	{
+		return Object.keys(this).length;
+	}
     
     // Funções auxiliares
     var rotateUnits = 'deg';
